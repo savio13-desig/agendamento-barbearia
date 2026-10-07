@@ -21,9 +21,9 @@ window.BARBEARIA = {
     { id: 3, nome: "Bia", esp: "Cortes e química" }
   ],
   servicos: [
-    { id: 1, nome: "Corte masculino", desc: "Máquina e tesoura, lavagem e finalização.", dur: 30, preco: 55 },
-    { id: 2, nome: "Barba", desc: "Toalha quente, navalha e hidratação.", dur: 30, preco: 40 },
-    { id: 3, nome: "Corte + Barba", desc: "O combo completo, com desconto.", dur: 60, preco: 85, tag: "Mais pedido" },
+    { id: 1, foto: "degrade", nome: "Corte masculino", desc: "Máquina e tesoura, lavagem e finalização.", dur: 30, preco: 55 },
+    { id: 2, foto: "barba", nome: "Barba", desc: "Toalha quente, navalha e hidratação.", dur: 30, preco: 40 },
+    { id: 3, foto: "barba", nome: "Corte + Barba", desc: "O combo completo, com desconto.", dur: 60, preco: 85, tag: "Mais pedido" },
     { id: 4, nome: "Corte infantil", desc: "Até 10 anos, com paciência de sobra.", dur: 30, preco: 45 },
     { id: 5, nome: "Acabamento e sobrancelha", desc: "Pezinho, nuca e sobrancelha na navalha.", dur: 30, preco: 25 },
     { id: 6, nome: "Platinado / Coloração", desc: "Descoloração e tonalização. Reserva 2 horas.", dur: 120, preco: 180, tag: "Novidade" }

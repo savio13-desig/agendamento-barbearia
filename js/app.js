@@ -25,7 +25,7 @@
   function passo1() {
     return '<h2 class="passo-titulo">Qual serviço?</h2><p class="passo-sub">Escolha o que você quer fazer hoje.</p><div class="lista">' +
       A.servicos().filter(function (x) { return x.ativo; }).map(function (x) {
-        return '<button class="escolha" data-serv="' + x.id + '" aria-pressed="' + (s.servId === x.id) + '"><span class="corpo"><b>' + esc(x.nome) + (x.tag ? '<span class="tag">' + esc(x.tag) + "</span>" : "") +
+        return '<button class="escolha" data-serv="' + x.id + '" aria-pressed="' + (s.servId === x.id) + '">' + (x.foto ? '<img class="thumb" src="img/' + x.foto + '-120.webp" width="56" height="56" alt="" loading="lazy">' : "") + '<span class="corpo"><b>' + esc(x.nome) + (x.tag ? '<span class="tag">' + esc(x.tag) + "</span>" : "") +
           "</b><small>" + esc(x.desc) + " · " + x.dur + ' min</small></span><span class="preco">' + A.brl(x.preco) + "</span></button>";
       }).join("") + '</div><div class="acoes"><button class="btn btn-primario" data-ir2 ' + (s.servId ? "" : "disabled") + ">Continuar</button></div>";
   }

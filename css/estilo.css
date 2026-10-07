@@ -162,3 +162,18 @@ dialog h2 { font-size: 1.4rem; margin: 0 48px var(--e2) 0; }
 .placa p { margin: 0; }
 @media print { body { background: #fff; } .nao-imprimir, .selo-demo { display: none !important; } .placa { border-color: #000; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+
+/* ===== Fotos ===== */
+.topo { position: relative; overflow: hidden; isolation: isolate; min-height: 200px; display: flex; align-items: center; }
+.topo-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 78% center; z-index: -2; }
+.topo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(14,14,15,.82), rgba(14,14,15,.6)); }
+@media (min-width: 768px) { .topo { min-height: 240px; } .topo::before { background: linear-gradient(90deg, rgba(14,14,15,.97) 0%, rgba(14,14,15,.85) 45%, rgba(14,14,15,.1) 100%); } }
+.topo-int { width: 100%; }
+.escolha .thumb { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; border: 2px solid var(--borda); }
+.nota-ia { text-align: center; font-size: .8rem; color: var(--texto-suave); padding: 0 var(--e2) var(--e3); margin: 0; }
+.foto-prop { margin: 0 0 var(--e3); }
+.foto-prop img { width: 100%; height: auto; border-radius: var(--raio); display: block; }
+.foto-prop figcaption { font-size: .8rem; color: var(--texto-suave); margin-top: 6px; }
+.galeria { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); margin-bottom: var(--e4); }
+.galeria img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--raio); display: block; }
+@media (max-width: 560px) { .galeria { grid-template-columns: 1fr 1fr; } .galeria img:first-child { grid-column: span 2; aspect-ratio: 16 / 9; } }
