@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartão fidelidade · Navalha & Co.</title>
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<div class="selo-demo">Amostra de demonstração · novapicks</div>
+<header class="topo"><div class="topo-int"><div class="poste" role="img" aria-label="Poste de barbeiro"></div><div><h1>Cartão fidelidade</h1><p id="regra"></p></div><a class="btn btn-contorno btn-pequeno fim" href="index.html">Agendar</a></div></header>
+<main>
+  <form id="f" class="caixa" novalidate>
+    <label for="tel" style="margin-top:0">Seu WhatsApp (o mesmo do agendamento)</label>
+    <div style="display:flex;gap:8px"><input type="tel" id="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 99999-9999"><button class="btn btn-primario" type="submit" style="flex:none">Ver meu cartão</button></div>
+    <p class="erro" id="erro" role="alert" hidden></p>
+  </form>
+  <div id="cartao" aria-live="polite"></div>
+</main>
+<script src="js/dados.js"></script>
+<script src="js/agenda.js"></script>
+<script>
+(function () {
+  "use strict";
+  var A = Agenda, F = A.C.fidelidade, $ = function (s) { return document.querySelector(s); };
+  $("#regra").textContent = "A cada " + F.meta + " atendimentos, " + F.premio + ". Quem marca o selo é a barbearia, depois do atendimento.";
+  $("#f").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var tel = A.soDigitos($("#tel").value), er = $("#erro");
+    if (tel.length < 10) { er.textContent = "Informe o WhatsApp com DDD."; er.hidden = false; return; }
+    er.hidden = true;
+    var r = A.selos(tel), h = "";
+    for (var i = 1; i <= F.meta; i++) h += '<div class="selo' + (i <= r.atual ? " cheio" : "") + '">' + (i <= r.atual ? "✓" : i) + "</div>";
+    $("#cartao").innerHTML = '<div class="cartao-fid"><h2 style="font-size:1.3rem">' + A.C.nome + '</h2><div class="selos" role="img" aria-label="' + r.atual + " de " + F.meta + ' selos">' + h + "</div>" +
+      "<p><b>" + r.atual + " de " + F.meta + "</b> selos" + (r.atual === F.meta ? ". <b style=\"color:var(--cobre)\">Prêmio liberado: " + F.premio + "!</b>" : ". Faltam " + (F.meta - r.atual) + " para ganhar " + F.premio + ".") + "</p>" +
+      '<p class="aviso">Atendimentos concluídos até hoje: ' + r.total + (r.completos ? " · cartões completos: " + r.completos : "") + "</p></div>";
+  });
+})();
+</script>
+</body>
+</html>

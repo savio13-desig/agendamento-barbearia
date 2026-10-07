@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minhas reservas · Navalha & Co.</title>
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<div class="selo-demo">Amostra de demonstração · novapicks</div>
+<header class="topo"><div class="topo-int"><div class="poste" role="img" aria-label="Poste de barbeiro"></div><div><h1>Minhas reservas</h1><p id="slogan"></p></div><a class="btn btn-contorno btn-pequeno fim" href="index.html">Novo agendamento</a></div></header>
+<main>
+  <form id="busca" class="caixa" novalidate>
+    <label for="cod" style="margin-top:0">Tem um código de reserva?</label>
+    <div style="display:flex;gap:8px"><input type="text" id="cod" maxlength="5" autocapitalize="characters" autocomplete="off" placeholder="Ex.: K7M2P" style="text-transform:uppercase"><button class="btn btn-primario" type="submit" style="flex:none">Buscar</button></div>
+    <p class="erro" id="erro" role="alert" hidden></p>
+  </form>
+  <div id="lista" aria-live="polite"></div>
+</main>
+<script src="js/dados.js"></script>
+<script src="js/agenda.js"></script>
+<script>
+(function () {
+  "use strict";
+  var A = Agenda, C = A.C, $ = function (s) { return document.querySelector(s); };
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  $("#slogan").textContent = C.nome;
+  var ROT = { agendado: "Agendado", concluido: "Concluído", cancelado: "Cancelado", faltou: "Não compareceu" };
+  var mostrar = [], codBuscado = new URLSearchParams(location.search).get("c");
+
+  function carregar() {
+    var l = A.meus();
+    if (codBuscado) { var a = A.porCodigo(codBuscado); if (a && !l.some(function (x) { return x.id === a.id; })) l.push(a); }
+    mostrar = l.sort(function (x, y) { return (y.data + y.hora).localeCompare(x.data + x.hora); });
+    desenhar();
+  }
+  function desenhar() {
+    $("#lista").innerHTML = mostrar.length ? mostrar.map(function (a) {
+      var ativo = a.status === "agendado", futuro = (a.data + " " + a.hora) >= (A.dstr(new Date()) + " " + A.hm(new Date().getHours() * 60 + new Date().getMinutes()));
+      return '<article class="caixa"><div class="resumo" style="margin:0 0 var(--e2)"><div><span>Código</span><b>' + a.cod + '</b></div><div><span>Serviço</span><b>' + esc(a.servNome) + "</b></div><div><span>Profissional</span><b>" + esc(A.prof(a.profId).nome) +
+        "</b></div><div><span>Quando</span><b>" + A.dataLonga(a.data) + " às " + a.hora + "</b></div><div><span>Situação</span><b>" + ROT[a.status] + (a.motivo === "remarcado" ? " (remarcado)" : "") + "</b></div></div>" +
+        (ativo && futuro ? '<div class="acoes" style="margin:0"><a class="btn btn-contorno" href="index.html?remarcar=' + a.cod + '">Remarcar</a><button class="btn btn-contorno" data-cancelar="' + a.id + '">Cancelar reserva</button></div>' : "") + "</article>";
+    }).join("") : '<p class="vazio">Nenhuma reserva encontrada neste aparelho. Digite o código acima ou <a href="index.html" style="color:var(--cobre)">faça um agendamento</a>.</p>';
+  }
+  $("#busca").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var a = A.porCodigo($("#cod").value.trim()), er = $("#erro");
+    if (!a) { er.textContent = "Código não encontrado."; er.hidden = false; return; }
+    er.hidden = true; codBuscado = a.cod; A.lembrar(a.cod); carregar();
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cancelar]"); if (!b) return;
+    if (confirm("Cancelar esta reserva?")) { A.mudar(Number(b.dataset.cancelar), { status: "cancelado" }); carregar(); }
+  });
+  carregar();
+})();
+</script>
+</body>
+</html>
